@@ -1,0 +1,27 @@
+{
+  "name": "dependensee",
+  "version": "1.0.0",
+  "description": "details the dependencies of an npm package",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "dependensee": "bin/dependensee.js"
+  },
+  "author": "Guy Israeli",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "^1.11.1",
+    "tree-stringify": "^1.1.0"
+
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.5",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  }
+}
