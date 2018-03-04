@@ -1,6 +1,6 @@
 {
   "name": "dependensee",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "details the dependencies of an npm package",
   "main": "index.js",
   "scripts": {
@@ -14,14 +14,13 @@
   "devDependencies": {
     "eslint": "^4.18.2",
     "eslint-plugin-prettier": "^2.6.0",
-    "prettier": "^1.11.1",
-    "tree-stringify": "^1.1.0"
-
+    "prettier": "^1.11.1"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
     "lodash": "^4.17.5",
     "request": "^2.83.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.2",
+    "tree-stringify": "^1.1.0"
   }
 }
