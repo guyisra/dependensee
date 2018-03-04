@@ -3,13 +3,13 @@ const request = require("request-promise")
 
 const BASE = "https://registry.npmjs.org"
 
-const packageUrl = (package, version) => {
-  return `${BASE}/${package}/${version}`
+const packageUrl = (modulePackage, version) => {
+  return `${BASE}/${modulePackage}/${version}`
 }
 
-const resolveDeps = async (package, version) => {
+const resolveDeps = async (modulePackage, version) => {
   const response = await request({
-    uri: packageUrl(package, version),
+    uri: packageUrl(modulePackage, version),
     json: true
   })
   const dependencies = response.dependencies || {}
@@ -29,13 +29,10 @@ const resolveDeps = async (package, version) => {
   return Object.assign({}, ...deps)
 }
 
-const dependensee = async (package, version) => {
+const dependensee = async (modulePackage, version) => {
   const tree = {}
-  const deps = await resolveDeps(package, version)
-  tree[package] = {
-    version: version,
-    dependencies: deps
-  }
+  const deps = await resolveDeps(modulePackage, version)
+  tree[modulePackage] = { version: version, dependencies: deps }
   return tree
 }
 

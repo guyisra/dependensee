@@ -1,11 +1,11 @@
 {
   "name": "dependensee",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "details the dependencies of an npm package",
   "main": "index.js",
   "homepage": "https://github.com/guyisra/dependensee",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "yarn jest index.spec.js --coverage"
   },
   "bin": {
     "dependensee": "bin/dependensee.js"
@@ -13,8 +13,10 @@
   "author": "Guy Israeli",
   "license": "ISC",
   "devDependencies": {
+    "coverage": "^0.0.0",
     "eslint": "^4.18.2",
     "eslint-plugin-prettier": "^2.6.0",
+    "jest": "^22.4.2",
     "prettier": "^1.11.1"
   },
   "dependencies": {
