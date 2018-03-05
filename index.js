@@ -12,28 +12,27 @@ const resolveDeps = async (modulePackage, version) => {
     uri: packageUrl(modulePackage, version),
     json: true
   })
-  const dependencies = response.dependencies || {}
+  const dependencies = response.dependencies || []
 
   const deps = await Promise.map(
     Object.keys(dependencies),
     async dep => {
-      const o = {}
-      o[dep] = {}
-      o[dep].version = dependencies[dep]
-      o[dep].dependencies = await resolveDeps(dep, dependencies[dep])
+      const name = dep
+      const version = dependencies[dep]
+      const o = { name, version}
+      o.dependencies = await resolveDeps(name, version)
       return o
     },
     { concurrency: 5 }
   )
 
-  return Object.assign({}, ...deps)
+  return deps
 }
 
 const dependensee = async (modulePackage, version) => {
   const tree = {}
   const deps = await resolveDeps(modulePackage, version)
-  tree[modulePackage] = { version: version, dependencies: deps }
-  return tree
+  return { name: modulePackage, version: version, dependencies: deps }
 }
 
 module.exports = dependensee
