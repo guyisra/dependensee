@@ -9,24 +9,38 @@ const packageUrl = (modulePackage, version) => {
   return `${BASE}/${modulePackage}/${version}`
 }
 
-const resolveDeps = async (modulePackage, version) => {
+const resolveDeps = async (modulePackage, version, parents) => {
+
+  if (parents && parents.includes(`${modulePackage}:${version}`)){
+    return []
+  }
+
   if (cache[modulePackage] && cache[modulePackage][version] && version!=="latest") {
     return cache[modulePackage][version]
   }
 
-  const response = await request({
-    uri: packageUrl(modulePackage, version),
-    json: true
-  })
-  const dependencies = response.dependencies || []
+  let response
+  let dependencies
+  try{
+
+     response = await request({
+      uri: packageUrl(modulePackage, version),
+      json: true
+    })
+     dependencies = response.dependencies || {}
+  }
+  catch(error){
+    console.log(`Error fetching dependencies for ${modulePackage}:${version} - ${error.message}`)
+    dependencies = {}
+  }
 
   const deps = await Promise.map(
     Object.keys(dependencies),
     async dep => {
       const name = dep
-      const version = dependencies[dep]
+      const depVersion = dependencies[dep]
 
-      return { name, version, dependencies: await resolveDeps(name, version) }
+      return { name, version: depVersion, dependencies: await resolveDeps(name, depVersion, [...parents, `${modulePackage}:${version}`]) }
     },
     { concurrency: 5 }
   )
@@ -39,7 +53,7 @@ const resolveDeps = async (modulePackage, version) => {
 
 const dependensee = async (modulePackage, version) => {
   const tree = {}
-  const deps = await resolveDeps(modulePackage, version)
+  const deps = await resolveDeps(modulePackage, version, [])
   return { name: modulePackage, version: version, dependencies: deps }
 }
 

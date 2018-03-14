@@ -52,4 +52,37 @@ describe("dependensee", () => {
       expect(mockRequest).toHaveBeenCalledTimes(2)
     })
   })
+
+  describe("with circular dependencies", () => {
+    it("handles it", async () => {
+      jest.resetModules()
+      jest.resetAllMocks()
+      const dependensee = require("./index.js")
+
+      mockRequest.mockImplementationOnce(() => ({ dependencies: { a: "1.2.3" } }))
+      mockRequest.mockImplementationOnce(() => ({ dependencies: { b: "1.1.1" } }))
+      mockRequest.mockImplementationOnce(() => ({ dependencies: { a: "1.2.3" } }))
+      mockRequest.mockImplementationOnce(() => ({ dependencies: { b: "1.1.1" } }))
+
+      const tree = await dependensee("something", "1.0.0")
+
+      expect(tree).toEqual({
+        name: "something",
+        version: "1.0.0",
+        dependencies: [
+          {
+            name: "a",
+            version: "1.2.3",
+            dependencies: [
+              {
+                name: "b",
+                version: "1.1.1",
+                dependencies: [{ name: "a", version: "1.2.3", dependencies: [] }]
+              }
+            ]
+          }
+        ]
+      })
+    })
+  })
 })

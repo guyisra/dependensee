@@ -1,6 +1,6 @@
 {
   "name": "dependensee",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "details the dependencies of an npm package",
   "main": "index.js",
   "homepage": "https://github.com/guyisra/dependensee",
